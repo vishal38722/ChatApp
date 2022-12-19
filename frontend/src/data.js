@@ -1,20 +1,6 @@
 exports.contacts = [
 
     {
-        "_id": "6393324da3efe139f6dfa747",
-        "name": "Vishal",
-        "email": "vishal38722@gmail.com",
-        "date": "2022-12-09T13:04:13.227Z",
-        "__v": 0
-    },
-    {
-        "_id": "63938809141fe61e0e6ae04d",
-        "name": "name",
-        "email": "name@gmail.com",
-        "date": "2022-12-09T19:10:01.897Z",
-        "__v": 0
-    },
-    {
         "_id": "6394bf624e41bcc60667eaee",
         "name": "Name 1",
         "email": "email1@gmail.com",
@@ -77,6 +63,5 @@ exports.contacts = [
         "date": "2022-12-10T17:23:58.733Z",
         "__v": 0
     }
-
 
 ]
