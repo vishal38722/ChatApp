@@ -2,9 +2,16 @@ import React, { useEffect, useState } from 'react'
 import dp from '../../../assets/dp.png'
 import axios from 'axios';
 import './Contact.css';
-import { contacts } from '../../../data';
-function Contact({contacts, user}) {
+// import { contacts } from '../../../data';
+function Contact({contacts, user, setCurrChatUser}) {
 
+  const [currentChat, setCurrentChat] = useState(undefined)
+
+  function changeUser (contact, index){
+    // console.log(contact);
+    setCurrentChat(index);
+    setCurrChatUser(contact);
+  }
 
   return (
     <>
@@ -30,16 +37,7 @@ function Contact({contacts, user}) {
             {
               contacts.map((contact, index) => {
                 return (
-                 /* <div
-                    key={contact._id}
-                    className="contact"
-                  // onClick={() => changeCurrentChat(index, contact)}
-                  >
-                    <img src={dp} alt='img'></img>
-                    {<h1>{contact.name}</h1>}
-                  </div>
-                  */
-                  <div className='contact'>
+                  <div className={`contact ${index===currentChat? "selected" : ""}`} onClick={() => changeUser(contact, index)}>
                     <div className='contact-image'
                     key={index}
                     style={{

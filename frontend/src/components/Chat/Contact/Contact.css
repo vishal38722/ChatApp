@@ -52,7 +52,7 @@ img{
     height: 32px;
     /* margin: 1rem; */
     border-radius: 20px;
-    padding: 0 1.5rem;
+    padding: 0 1rem;
     /* overflow: hidden; */
 }
 
@@ -89,8 +89,9 @@ img{
 ::-webkit-scrollbar{
     display: none;
 }
+
 .selected{
-    background-color: rgb(35, 146, 206);
+    background-color: #c8c6c0;
 }
 
 /* @media screen and (min-width: 720px) and (max-width: 1080px) {

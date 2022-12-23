@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate} from 'react-router-dom';
 import ChatContent from './ChatContent/ChatContent';
+import Welcome from './ChatContent/Welcome/Welcome';
 import Contact from './Contact/Contact';
-import './Chat.css'
 import axios from 'axios';
+import './Chat.css'
 
 function Chat() {
   const navigate = useNavigate();
+  const [currChatUser, setCurrChatUser] = useState(undefined);
   
   useEffect(() => {
       if (localStorage.getItem('token')) {
@@ -28,7 +30,7 @@ function Chat() {
             headers: { 
               "Content-Type": "application/json", 
               // authorization: `Bearer ${localStorage.getItem('token')}` },
-              "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjNhMDllNDUzOGY0Nzc3Njk2MTRhM2I4IiwibmFtZSI6Imt1bGRlZXAifSwiaWF0IjoxNjcxNDcwNzI0fQ.47UZ1Eys_ZkgaahsNazQxLHJLgK9Dnv88LwXbPXQKTc" },
+              "auth-token": localStorage.getItem('token') },
             withCredentials: true,
           }
         )
@@ -49,8 +51,8 @@ function Chat() {
 
   return (
     <div className='chat-container'>
-        <div className='cntct'><Contact contacts={contacts} user={user}/></div>
-        <div className='chat-cntnt'><ChatContent /></div>
+        <div className='cntct'><Contact contacts={contacts} user={user} setCurrChatUser={setCurrChatUser}/></div>
+        <div className='chat-cntnt'>{currChatUser===undefined ? <Welcome user={user}/> : <ChatContent currChatUser={currChatUser} user={user} />}</div>
     </div>
   )
 }
