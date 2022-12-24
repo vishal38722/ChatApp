@@ -16,6 +16,7 @@ router.post('/addMessage', async (req, res) => {
       if(data) return res.json({msg : "Message added successfully to the database."});
       else return res.json({msg : "Failed to add message to the database"});
   } catch (error) {
+      console.log("Inside addMessage");
       console.error(error.message);
       res.status(500).send("Internal Server Error");
   }
@@ -40,6 +41,7 @@ router.post('/getMessage', async (req, res) => {
     });
     res.json(projectedMessages);
   } catch (error) {
+    console.log("Inside getMessage");
       console.error(error.message);
       res.status(500).send("Internal Server Error");
   }

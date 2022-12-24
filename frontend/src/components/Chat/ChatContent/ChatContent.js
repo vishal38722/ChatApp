@@ -1,83 +1,35 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import dp from '../../../assets/dp.png'
 import { MdSend } from 'react-icons/md';
 import { BsEmojiSmileFill } from "react-icons/bs";
 import Picker from "emoji-picker-react";
 import Welcome from './Welcome/Welcome';
+import { v4 as uuidv4 } from "uuid";
 import axios from 'axios';
 import './ChatContent.css';
 
-function ChatContent({ currChatUser, user }) {
-  // const chats = [
-  //   {
-  //     forUser: true,
-  //     content:
-  //       "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-  //   },
-  //   {
-  //     forUser: false,
-  //     content:
-  //       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean efficitur sit amet massa fringilla egestas.",
-  //   },
-  //   {
-  //     forUser: true,
-  //     content:
-  //       "Lorem ipsum dolor sit amet",
-  //   },
-  //   {
-  //     forUser: false,
-  //     content:
-  //       "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-  //   },
-  //   {
-  //     forUser: true,
-  //     content:
-  //       "Lorem ipsum dolor sit amet, consectetur adipiscing elit..",
-  //   },
-  //   {
-  //     forUser: false,
-  //     content:
-  //       "Lorem ipsum dolor sit amet.",
-  //   },
-  //   {
-  //     forUser: true,
-  //     content:
-  //       "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-  //   },
-  //   {
-  //     forUser: false,
-  //     content:
-  //       "Lorem ipsum dolor sit amet.",
-  //   },
-  // ];
+function ChatContent({ currChatUser, user, socket }) {
 
   const [message, setMessage] = useState([])
   const [chats, setChats] = useState([]);
+  const scrollRef = useRef();
+  const [arrivalMessage, setArrivalMessage] = useState(null);
 
   // const handleChange = (e) => {
   //   setMessage({ ...message, [e.target.name]: e.target.value });
   // }
 
-  // useEffect(async () => {
-  //   // const user = await JSON.parse(
-  //   //   localStorage.getItem('token')
-  //   // );
-
-  //   const response = await axios.post("http://localhost:5000/api/message/getMessage", {
-  //     from: user._id,
-  //     to: currChatUser._id
-  //   });
-  //   setChats(response.data);
-  // }, [])
-
   useEffect(() => {
     async function fetch() {
       try {
+        if(currChatUser){
+        // const user = await JSON.parse(localStorage.getItem('token'));
         const response = await axios.post("http://localhost:5000/api/message/getMessage", {
-      from: user._id,
-      to: currChatUser._id
-    });
-    setChats(response.data);
+          from: user._id,
+          to: currChatUser._id
+        });
+        setChats(response.data);
+      }
       }
       catch (error) {
         console.log("Internal Server Error")
@@ -87,33 +39,52 @@ function ChatContent({ currChatUser, user }) {
     fetch();
   }, [currChatUser])
 
-  // useEffect(() => {
-  //   const getCurrentChat = async () => {
-  //     if (currChatUser) {
-  //       await JSON.parse(
-  //         localStorage.getItem('token')
-  //       )._id;
-  //     }
-  //   };
-  //   getCurrentChat();
-  // }, [currChatUser]);
-
   const sendMessage = async () => {
+    // const user = await JSON.parse(localStorage.getItem('token'));
     // API Call
-    const response = await fetch("http://localhost:5000/api/message/addMessage", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        message: message,
-        from: user._id,
-        to: currChatUser._id
-      })
+    // const response = await fetch("http://localhost:5000/api/message/addMessage", {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify({
+    //     message: message,
+    //     from: user._id,
+    //     to: currChatUser._id
+    //   });
+
+    await axios.post("http://localhost:5000/api/message/addMessage", {
+      message: message,
+      from: user._id,
+      to: currChatUser._id,
     });
 
-    console.log(response)
+    socket.current.emit("send-msg", {
+      message: message,
+      from: user._id,
+      to: currChatUser._id,
+    });
+
+    const msgs = [...message];
+    msgs.push({ forUser: false, message: message });
+    setMessage(msgs);
   }
+
+  useEffect(() => {
+    if (socket.current) {
+      socket.current.on("msg-recieve", (msg) => {
+        setArrivalMessage({ forUser: true, message: msg });
+      });
+    }
+  }, []);
+
+  // useEffect(() => {
+  //   arrivalMessage && setMessage((prev) => [...prev, arrivalMessage]);
+  // }, [arrivalMessage]);
+
+  // useEffect(() => {
+  //   scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  // }, [message]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -134,7 +105,7 @@ function ChatContent({ currChatUser, user }) {
       <div className='bg-success chat'>
         {chats.map((chat) => {
           return (
-            <div className={`message ${chat.forUser ? "recieved" : "sent"}`}>{chat.message}</div>
+            <div key={uuidv4()} className={`message ${chat.forUser ? "recieved" : "sent"}`}>{chat.message}</div>
           )
         })}
       </div>

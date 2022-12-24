@@ -53,20 +53,17 @@ img{
     /* margin: 1rem; */
     border-radius: 20px;
     padding: 0 1rem;
-    /* overflow: hidden; */
 }
 
 .contacts{
-    /* overflow: hidden;
-    overflow-y: auto;
-    height: 79%;  */
     display: flex;
     width: 100%;
     flex-wrap: wrap;
     justify-content: flex-start;
     align-items: flex-start;
     height: 80vh;
-    overflow: scroll;
+    overflow: hidden;
+    overflow-y: auto;
 }
 
 .contact{
