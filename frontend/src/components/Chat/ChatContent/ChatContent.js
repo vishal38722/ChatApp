@@ -58,44 +58,34 @@ function ChatContent({ currChatUser, user }) {
   //   setMessage({ ...message, [e.target.name]: e.target.value });
   // }
 
-  useEffect(async () => {
-    // const user = await JSON.parse(
-    //   localStorage.getItem('token')
-    // );
+  // useEffect(async () => {
+  //   // const user = await JSON.parse(
+  //   //   localStorage.getItem('token')
+  //   // );
 
-    const response = await axios.post("http://localhost:5000/api/message/getMessage", {
+  //   const response = await axios.post("http://localhost:5000/api/message/getMessage", {
+  //     from: user._id,
+  //     to: currChatUser._id
+  //   });
+  //   setChats(response.data);
+  // }, [])
+
+  useEffect(() => {
+    async function fetch() {
+      try {
+        const response = await axios.post("http://localhost:5000/api/message/getMessage", {
       from: user._id,
       to: currChatUser._id
     });
     setChats(response.data);
-  }, [])
-
-  // useEffect(() => {
-  //   async function fetch() {
-  //     try {
-  //       const response = await axios.post('http://localhost:5000/api/message/getMessage',
-  //         {
-  //           method: 'POST',
-  //           headers: { 
-  //             "Content-Type": "application/json", 
-  //             // authorization: `Bearer ${localStorage.getItem('token')}` },
-  //             // "auth-token": localStorage.getItem('token') 
-  //           },
-  //           body: JSON.stringify({ from: user._id, to: currChatUser._id }),
-  //           withCredentials: true,
-  //         }
-  //       )
-  //       console.log("Hello")
-  //       console.log(response)
-  //       setChats(response.data);
-  //     }
-  //     catch (error) {
-  //       console.log("Internal Server Error")
-  //       console.log(error);
-  //     }
-  //   }
-  //   fetch();
-  // }, [])
+      }
+      catch (error) {
+        console.log("Internal Server Error")
+        console.log(error);
+      }
+    }
+    fetch();
+  }, [currChatUser])
 
   // useEffect(() => {
   //   const getCurrentChat = async () => {
