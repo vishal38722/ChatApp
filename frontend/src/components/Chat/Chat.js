@@ -9,6 +9,8 @@ import './Chat.css'
 function Chat() {
   const navigate = useNavigate();
   const [currChatUser, setCurrChatUser] = useState(undefined);
+  const [contacts, setContacts] = useState([])
+  const [user, setUser] = useState({})
   
   useEffect(() => {
       if (localStorage.getItem('token')) {
@@ -19,8 +21,6 @@ function Chat() {
       }
   }, [])
 
-  const [contacts, setContacts] = useState([])
-  const [user, setUser] = useState({})
   
   useEffect(() => {
     async function fetch() {
@@ -41,7 +41,7 @@ function Chat() {
         console.log(contacts)
       }
       catch (error) {
-        console.log("An Error occurred")
+        console.log("Internal Server Error")
         console.log(error);
       }
     }
@@ -51,7 +51,7 @@ function Chat() {
 
   return (
     <div className='chat-container'>
-        <div className='cntct'><Contact contacts={contacts} user={user} setCurrChatUser={setCurrChatUser}/></div>
+        <div className='cntct'><Contact contacts={contacts} user={user} changeCurrChat={setCurrChatUser}/></div>
         <div className='chat-cntnt'>{currChatUser===undefined ? <Welcome user={user}/> : <ChatContent currChatUser={currChatUser} user={user} />}</div>
     </div>
   )

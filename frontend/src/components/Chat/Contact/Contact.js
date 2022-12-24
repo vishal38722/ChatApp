@@ -3,14 +3,14 @@ import dp from '../../../assets/dp.png'
 import axios from 'axios';
 import './Contact.css';
 // import { contacts } from '../../../data';
-function Contact({contacts, user, setCurrChatUser}) {
+function Contact({contacts, user, changeCurrChat}) {
 
   const [currentChat, setCurrentChat] = useState(undefined)
 
   function changeUser (contact, index){
     // console.log(contact);
     setCurrentChat(index);
-    setCurrChatUser(contact);
+    changeCurrChat(contact);
   }
 
   return (

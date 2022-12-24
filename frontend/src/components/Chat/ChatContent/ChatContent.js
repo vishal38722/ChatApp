@@ -7,7 +7,7 @@ import Welcome from './Welcome/Welcome';
 import axios from 'axios';
 import './ChatContent.css';
 
-function ChatContent({currChatUser, user}) {
+function ChatContent({ currChatUser, user }) {
   // const chats = [
   //   {
   //     forUser: true,
@@ -51,7 +51,7 @@ function ChatContent({currChatUser, user}) {
   //   },
   // ];
 
-  const [message, setMessage] = useState([]);
+  const [message, setMessage] = useState([])
   const [chats, setChats] = useState([]);
 
   // const handleChange = (e) => {
@@ -59,42 +59,74 @@ function ChatContent({currChatUser, user}) {
   // }
 
   useEffect(async () => {
+    // const user = await JSON.parse(
+    //   localStorage.getItem('token')
+    // );
+
     const response = await axios.post("http://localhost:5000/api/message/getMessage", {
-      from : user._id,
-      to : currChatUser._id
+      from: user._id,
+      to: currChatUser._id
     });
     setChats(response.data);
-  }, [currChatUser])   
+  }, [])
+
+  // useEffect(() => {
+  //   async function fetch() {
+  //     try {
+  //       const response = await axios.post('http://localhost:5000/api/message/getMessage',
+  //         {
+  //           method: 'POST',
+  //           headers: { 
+  //             "Content-Type": "application/json", 
+  //             // authorization: `Bearer ${localStorage.getItem('token')}` },
+  //             // "auth-token": localStorage.getItem('token') 
+  //           },
+  //           body: JSON.stringify({ from: user._id, to: currChatUser._id }),
+  //           withCredentials: true,
+  //         }
+  //       )
+  //       console.log("Hello")
+  //       console.log(response)
+  //       setChats(response.data);
+  //     }
+  //     catch (error) {
+  //       console.log("Internal Server Error")
+  //       console.log(error);
+  //     }
+  //   }
+  //   fetch();
+  // }, [])
+
+  // useEffect(() => {
+  //   const getCurrentChat = async () => {
+  //     if (currChatUser) {
+  //       await JSON.parse(
+  //         localStorage.getItem('token')
+  //       )._id;
+  //     }
+  //   };
+  //   getCurrentChat();
+  // }, [currChatUser]);
 
   const sendMessage = async () => {
-    // const currentUser = await JSON.parse(
-    //   localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
-    // );
-    
-      // API Call
-      const response = await fetch("http://localhost:5000/api/message/addMessage", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ 
-          message: message, 
-          from: user._id, 
-          to: currChatUser._id })
-      });
+    // API Call
+    const response = await fetch("http://localhost:5000/api/message/addMessage", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: message,
+        from: user._id,
+        to: currChatUser._id
+      })
+    });
 
-      console.log(response)
-
-      // await axios.post(sendMessageRoute, {
-      //   from: data._id,
-      //   to: currChatUser._id,
-      //   message: msg,
-      // });
+    console.log(response)
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (message.length > 0) {
       sendMessage(message)
       setMessage("");
@@ -103,7 +135,7 @@ function ChatContent({currChatUser, user}) {
 
   return (
     <div className='chat-content'>
-      
+
       <div className='chat-header'>
         <img src={dp} alt='img'></img>
         <h1>{currChatUser.name}</h1>
@@ -124,7 +156,7 @@ function ChatContent({currChatUser, user}) {
             {/* {showEmojiPicker && <Picker onEmojiClick={emojiClick} />} */}
             <input type='text' className='input' onChange={(e) => setMessage(e.target.value)} value={message}></input>
             <MdSend className='icons' />
-            
+
           </div>
         </form>
       </div>
